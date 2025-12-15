@@ -1,0 +1,205 @@
+@model Progetto.Web.Areas.Dipendente.ViewModels.StoricoUtilizziViewModel
+
+@{
+    ViewData["Title"] = "Storico Utilizzi";
+}
+
+<style>
+    .navbar-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 0;
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="navbar-custom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="text-white mb-0"><i class="bi bi-ticket-perforated"></i> Buoni Digitali</h4>
+            </div>
+            <div class="text-white">
+                <i class="bi bi-person-circle"></i> <strong>@Model.NomeDipendente</strong> | @Model.NomeAzienda
+                <form method="post" action="/Welcome/Logout" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-outline-light ms-3">
+                        <i class="bi bi-box-arrow-right"></i> Esci
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="bi bi-clock-history"></i> Storico Utilizzi</h2>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Index" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Torna alle Convenzioni
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Utilizzi.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Non hai ancora utilizzato nessuna convenzione.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Codice</th>
+                        <th>Convenzione</th>
+                        <th>Esercente</th>
+                        <th class="text-end">Importo Totale</th>
+                        <th class="text-end">Sconto</th>
+                        <th class="text-end">Pagato</th>
+                        <th>Stato</th>
+                        <th>Data Richiesta</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var utilizzo in Model.Utilizzi)
+                    {
+                        <tr style="cursor: pointer;" onclick="document.getElementById('btnDettaglio@(utilizzo.Id)').click()">
+                            <td>
+                                <code>@utilizzo.CodiceUtilizzo</code>
+                            </td>
+                            <td>@utilizzo.TitoloConvenzione</td>
+                            <td>@utilizzo.NomeEsercente</td>
+                            <td class="text-end">@string.Format("€{0:N2}", utilizzo.ImportoTotale)</td>
+                            <td class="text-end text-success">@string.Format("€{0:N2}", utilizzo.ImportoSconto)</td>
+                            <td class="text-end"><strong>@string.Format("€{0:N2}", utilizzo.ImportoPagato)</strong></td>
+                            <td>
+                                @switch (utilizzo.Stato)
+                                {
+                                    case "Richiesto":
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-clock"></i> In Attesa
+                                        </span>
+                                        break;
+                                    case "Certificato":
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle"></i> Certificato
+                                        </span>
+                                        break;
+                                    case "Rifiutato":
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-x-circle"></i> Rifiutato
+                                        </span>
+                                        break;
+                                    case "Annullato":
+                                        <span class="badge bg-secondary">
+                                            <i class="bi bi-dash-circle"></i> Annullato
+                                        </span>
+                                        break;
+                                }
+                            </td>
+                            <td>@utilizzo.DataRichiesta.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td onclick="event.stopPropagation();">
+                                <button type="button" id="btnDettaglio@(utilizzo.Id)" class="btn btn-sm btn-outline-info" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#dettaglioModal@(utilizzo.Id)">
+                                    <i class="bi bi-eye"></i> Dettagli
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Modal Dettaglio -->
+                        <div class="modal fade" id="dettaglioModal@(utilizzo.Id)" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title">Dettaglio Utilizzo</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Codice:</dt>
+                                            <dd class="col-sm-8"><code>@utilizzo.CodiceUtilizzo</code></dd>
+
+                                            <dt class="col-sm-4">Convenzione:</dt>
+                                            <dd class="col-sm-8">@utilizzo.TitoloConvenzione</dd>
+
+                                            <dt class="col-sm-4">Esercente:</dt>
+                                            <dd class="col-sm-8">@utilizzo.NomeEsercente</dd>
+
+                                            <dt class="col-sm-4">Importo Totale:</dt>
+                                            <dd class="col-sm-8">@string.Format("€{0:N2}", utilizzo.ImportoTotale)</dd>
+
+                                            <dt class="col-sm-4">Sconto:</dt>
+                                            <dd class="col-sm-8 text-success">@string.Format("€{0:N2}", utilizzo.ImportoSconto)</dd>
+
+                                            <dt class="col-sm-4">Pagato:</dt>
+                                            <dd class="col-sm-8"><strong>@string.Format("€{0:N2}", utilizzo.ImportoPagato)</strong></dd>
+
+                                            <dt class="col-sm-4">Stato:</dt>
+                                            <dd class="col-sm-8">@utilizzo.Stato</dd>
+
+                                            <dt class="col-sm-4">Data Richiesta:</dt>
+                                            <dd class="col-sm-8">@utilizzo.DataRichiesta.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                                            @if (utilizzo.DataCertificazione.HasValue)
+                                            {
+                                                <dt class="col-sm-4">Data Certificazione:</dt>
+                                                <dd class="col-sm-8">@utilizzo.DataCertificazione.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(utilizzo.Note))
+                                            {
+                                                <dt class="col-sm-4">Note:</dt>
+                                                <dd class="col-sm-8">@utilizzo.Note</dd>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(utilizzo.MotivoRifiuto))
+                                            {
+                                                <dt class="col-sm-4">Motivo Rifiuto:</dt>
+                                                <dd class="col-sm-8 text-danger">@utilizzo.MotivoRifiuto</dd>
+                                            }
+                                        </dl>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Riepilogo</h5>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h3 class="text-primary">@Model.Utilizzi.Count()</h3>
+                    <p class="text-muted">Totale Richieste</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="text-success">@Model.Utilizzi.Count(u => u.Stato == "Certificato")</h3>
+                    <p class="text-muted">Certificati</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="text-danger">@Model.Utilizzi.Count(u => u.Stato == "Rifiutato")</h3>
+                    <p class="text-muted">Rifiutati</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="text-success">@string.Format("€{0:N2}", Model.Utilizzi.Where(u => u.Stato == "Certificato").Sum(u => u.ImportoSconto))</h3>
+                    <p class="text-muted">Totale Risparmiato</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}

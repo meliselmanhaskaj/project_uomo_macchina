@@ -1,0 +1,223 @@
+@model Progetto.Web.Areas.Dipendente.ViewModels.ConvenzioniDisponibiliViewModel
+
+@{
+    ViewData["Title"] = "Convenzioni Disponibili";
+}
+
+<style>
+    .navbar-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 0;
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="navbar-custom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="text-white mb-0"><i class="bi bi-ticket-perforated"></i> Buoni Digitali</h4>
+            </div>
+            <div class="text-white">
+                <i class="bi bi-person-circle"></i> <strong>@Model.NomeDipendente</strong> | @Model.NomeAzienda
+                <form method="post" action="/Welcome/Logout" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-outline-light ms-3">
+                        <i class="bi bi-box-arrow-right"></i> Esci
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Convenzioni Disponibili</h2>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Storico" class="btn btn-outline-primary">
+                <i class="bi bi-clock-history"></i> Storico Utilizzi
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Convenzioni.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Non ci sono convenzioni disponibili al momento.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var convenzione in Model.Convenzioni)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">@convenzione.Titolo</h5>
+                            @if (!string.IsNullOrEmpty(convenzione.CategoriaEsercente))
+                            {
+                                <small><i class="bi bi-tag"></i> @convenzione.CategoriaEsercente</small>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <h6 class="text-success">
+                                <i class="bi bi-shop"></i> @convenzione.NomeEsercente
+                            </h6>
+                            @if (!string.IsNullOrEmpty(convenzione.IndirizzoEsercente))
+                            {
+                                <p class="text-muted small mb-2">
+                                    <i class="bi bi-geo-alt"></i> @convenzione.IndirizzoEsercente
+                                </p>
+                            }
+                            
+                            <p class="card-text">@convenzione.Descrizione</p>
+
+                            <div class="mt-3">
+                                <div class="mb-2">
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-percent"></i> Sconto: @convenzione.PercentualeSconto%
+                                    </span>
+                                </div>
+
+                                @if (convenzione.ImportoMinimo.HasValue)
+                                {
+                                    <div class="small text-muted">
+                                        <i class="bi bi-cash"></i> Importo minimo: @string.Format("€{0:N2}", convenzione.ImportoMinimo.Value)
+                                    </div>
+                                }
+
+                                @if (convenzione.ImportoMassimoSconto.HasValue)
+                                {
+                                    <div class="small text-muted">
+                                        <i class="bi bi-cash-coin"></i> Sconto max: @string.Format("€{0:N2}", convenzione.ImportoMassimoSconto.Value)
+                                    </div>
+                                }
+
+                                @if (convenzione.MaxUtilizziPerDipendente.HasValue && convenzione.PeriodoGiorni.HasValue)
+                                {
+                                    <div class="small text-muted">
+                                        <i class="bi bi-calendar-check"></i> Max @convenzione.MaxUtilizziPerDipendente utilizzi ogni @convenzione.PeriodoGiorni giorni
+                                    </div>
+                                }
+
+                                <div class="small text-muted mt-2">
+                                    <i class="bi bi-calendar-range"></i> 
+                                    Valida dal @convenzione.DataInizio.ToString("dd/MM/yyyy")
+                                    @if (convenzione.DataFine.HasValue)
+                                    {
+                                        @: al @convenzione.DataFine.Value.ToString("dd/MM/yyyy")
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#richiestaModal@(convenzione.Id)">
+                                <i class="bi bi-check-circle"></i> Richiedi Utilizzo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Richiesta Utilizzo -->
+                <div class="modal fade" id="richiestaModal@(convenzione.Id)" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-ticket-perforated"></i> Richiedi Utilizzo Convenzione
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <strong>Convenzione:</strong> @convenzione.Titolo<br />
+                                    <strong>Esercente:</strong> @convenzione.NomeEsercente<br />
+                                    <strong>Sconto:</strong> @convenzione.PercentualeSconto%
+                                    @if (convenzione.ImportoMinimo.HasValue)
+                                    {
+                                        <br /><strong>Importo minimo:</strong> @string.Format("€{0:N2}", convenzione.ImportoMinimo.Value)
+                                    }
+                                    @if (convenzione.ImportoMassimoSconto.HasValue)
+                                    {
+                                        <br /><strong>Sconto massimo:</strong> @string.Format("€{0:N2}", convenzione.ImportoMassimoSconto.Value)
+                                    }
+                                </div>
+
+                                <form asp-action="Richiedi" method="post" id="richiestaForm@(convenzione.Id)">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="ConvenzioneId" value="@convenzione.Id" />
+
+                                    <div class="mb-3">
+                                        <label for="importoTotale@(convenzione.Id)" class="form-label">Importo Totale (€)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">&euro;</span>
+                                            <input type="number" step="0.01" class="form-control" id="importoTotale@(convenzione.Id)" name="ImportoTotale" required />
+                                        </div>
+                                    </div>
+
+                                    <div id="calcoloSconto@(convenzione.Id)" class="alert alert-success d-none">
+                                        <h6>Riepilogo:</h6>
+                                        <div><strong>Importo Totale:</strong> <span id="importoDisplay@(convenzione.Id)">€0.00</span></div>
+                                        <div><strong>Sconto (@convenzione.PercentualeSconto%):</strong> <span id="scontoDisplay@(convenzione.Id)" class="text-success">-€0.00</span></div>
+                                        <hr />
+                                        <div class="fs-5"><strong>Da Pagare:</strong> <span id="daPageareDisplay@(convenzione.Id)">€0.00</span></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="note@(convenzione.Id)" class="form-label">Note (opzionale)</label>
+                                        <textarea class="form-control" id="note@(convenzione.Id)" name="Note" rows="3"></textarea>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-send"></i> Invia Richiesta
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('importoTotale@(convenzione.Id)')?.addEventListener('input', function() {
+                        const importo = parseFloat(this.value) || 0;
+                        const percentuale = @convenzione.PercentualeSconto;
+                        let sconto = (importo * percentuale) / 100;
+                        
+                        @if (convenzione.ImportoMassimoSconto.HasValue)
+                        {
+                            <text>
+                            if (sconto > @convenzione.ImportoMassimoSconto.Value) {
+                                sconto = @convenzione.ImportoMassimoSconto.Value;
+                            }
+                            </text>
+                        }
+                        
+                        const daPagare = importo - sconto;
+                        
+                        document.getElementById('importoDisplay@(convenzione.Id)').textContent = '€' + importo.toFixed(2);
+                        document.getElementById('scontoDisplay@(convenzione.Id)').textContent = '-€' + sconto.toFixed(2);
+                        document.getElementById('daPageareDisplay@(convenzione.Id)').textContent = '€' + daPagare.toFixed(2);
+                        
+                        if (importo > 0) {
+                            document.getElementById('calcoloSconto@(convenzione.Id)').classList.remove('d-none');
+                        } else {
+                            document.getElementById('calcoloSconto@(convenzione.Id)').classList.add('d-none');
+                        }
+                    });
+                </script>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}

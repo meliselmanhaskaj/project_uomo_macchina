@@ -1,0 +1,320 @@
+@model Progetto.Web.Areas.Esercente.ViewModels.RichiesteInAttesaViewModel
+
+@{
+    ViewData["Title"] = "Richieste in Attesa";
+}
+
+<style>
+    .navbar-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 0;
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="navbar-custom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="text-white mb-0"><i class="bi bi-ticket-perforated"></i> Buoni Digitali</h4>
+            </div>
+            <div class="text-white">
+                <i class="bi bi-shop"></i> <strong>@Model.NomeEsercente</strong>
+                <form method="post" action="/Welcome/Logout" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-outline-light ms-3">
+                        <i class="bi bi-box-arrow-right"></i> Esci
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="bi bi-hourglass-split"></i> Richieste in Attesa di Certificazione</h2>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Storico" class="btn btn-outline-primary">
+                <i class="bi bi-clock-history"></i> Storico Transazioni
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Richieste.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Non ci sono richieste in attesa al momento.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Hai <strong>@Model.Richieste.Count</strong> richieste in attesa di certificazione.
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Codice</th>
+                        <th>Convenzione</th>
+                        <th>Dipendente</th>
+                        <th>Azienda</th>
+                        <th class="text-end">Importo</th>
+                        <th class="text-end">Sconto</th>
+                        <th class="text-end">Incassato</th>
+                        <th class="text-end">Rimborso</th>
+                        <th>Data Richiesta</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var richiesta in Model.Richieste)
+                    {
+                        <tr style="cursor: pointer;" onclick="document.getElementById('btnDettaglioEserc@(richiesta.Id)').click()">
+                            <td><code>@richiesta.CodiceUtilizzo</code></td>
+                            <td>@richiesta.TitoloConvenzione</td>
+                            <td>
+                                @richiesta.NomeDipendente
+                                <br />
+                                <small class="text-muted">@richiesta.EmailDipendente</small>
+                            </td>
+                            <td>@richiesta.Azienda</td>
+                            <td class="text-end">@string.Format("€{0:N2}", richiesta.ImportoTotale)</td>
+                            <td class="text-end text-success">@string.Format("-€{0:N2}", richiesta.ImportoSconto)</td>
+                            <td class="text-end"><strong>@string.Format("€{0:N2}", richiesta.ImportoPagato)</strong></td>
+                            <td class="text-end text-primary">
+                                <strong>@string.Format("€{0:N2}", richiesta.ImportoRemunerazione)</strong>
+                            </td>
+                            <td>@richiesta.DataRichiesta.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td onclick="event.stopPropagation();">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-success" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#certificaModal@(richiesta.Id)"
+                                            title="Certifica">
+                                        <i class="bi bi-check-circle"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#rifiutaModal@(richiesta.Id)"
+                                            title="Rifiuta">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                    <button type="button" id="btnDettaglioEserc@(richiesta.Id)" 
+                                            class="btn btn-sm btn-info" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#dettaglioModal@(richiesta.Id)"
+                                            title="Dettagli">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Modal Dettaglio -->
+                        <div class="modal fade" id="dettaglioModal@(richiesta.Id)" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title">Dettaglio Richiesta</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <dl class="row">
+                                            <dt class="col-sm-5">Codice Utilizzo:</dt>
+                                            <dd class="col-sm-7"><code>@richiesta.CodiceUtilizzo</code></dd>
+
+                                            <dt class="col-sm-5">Convenzione:</dt>
+                                            <dd class="col-sm-7">@richiesta.TitoloConvenzione</dd>
+
+                                            <dt class="col-sm-5">Dipendente:</dt>
+                                            <dd class="col-sm-7">
+                                                @richiesta.NomeDipendente<br />
+                                                <small class="text-muted">@richiesta.EmailDipendente</small>
+                                            </dd>
+
+                                            <dt class="col-sm-5">Azienda:</dt>
+                                            <dd class="col-sm-7">@richiesta.Azienda</dd>
+
+                                            <dt class="col-sm-5">Importo Totale:</dt>
+                                            <dd class="col-sm-7">@string.Format("€{0:N2}", richiesta.ImportoTotale)</dd>
+
+                                            <dt class="col-sm-5">Sconto Applicato:</dt>
+                                            <dd class="col-sm-7 text-success">@string.Format("€{0:N2}", richiesta.ImportoSconto)</dd>
+
+                                            <dt class="col-sm-5">Incassato da Cliente:</dt>
+                                            <dd class="col-sm-7"><strong>@string.Format("€{0:N2}", richiesta.ImportoPagato)</strong></dd>
+
+                                            <dt class="col-sm-5">Tua Remunerazione:</dt>
+                                            <dd class="col-sm-7 text-primary"><strong>@string.Format("€{0:N2}", richiesta.ImportoRemunerazione)</strong></dd>
+
+                                            <dt class="col-sm-5">Data Richiesta:</dt>
+                                            <dd class="col-sm-7">@richiesta.DataRichiesta.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                                            @if (!string.IsNullOrEmpty(richiesta.Note))
+                                            {
+                                                <dt class="col-sm-5">Note:</dt>
+                                                <dd class="col-sm-7">@richiesta.Note</dd>
+                                            }
+                                        </dl>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Certifica -->
+                        <div class="modal fade" id="certificaModal@(richiesta.Id)" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title">
+                                            <i class="bi bi-check-circle-fill"></i> Certifica Utilizzo Convenzione
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="alert alert-warning">
+                                            <i class="bi bi-exclamation-triangle"></i> 
+                                            Verifica attentamente i dati prima di certificare l'utilizzo. Questa operazione non può essere annullata.
+                                        </div>
+
+                                        <dl class="row">
+                                            <dt class="col-sm-5">Codice Utilizzo:</dt>
+                                            <dd class="col-sm-7"><code class="fs-5">@richiesta.CodiceUtilizzo</code></dd>
+
+                                            <dt class="col-sm-5">Convenzione:</dt>
+                                            <dd class="col-sm-7"><strong>@richiesta.TitoloConvenzione</strong></dd>
+
+                                            <dt class="col-sm-5">Dipendente:</dt>
+                                            <dd class="col-sm-7">@richiesta.NomeDipendente</dd>
+
+                                            <dt class="col-sm-5">Azienda:</dt>
+                                            <dd class="col-sm-7">@richiesta.Azienda</dd>
+
+                                            <dt class="col-sm-5">Importo Totale:</dt>
+                                            <dd class="col-sm-7">@string.Format("€{0:N2}", richiesta.ImportoTotale)</dd>
+
+                                            <dt class="col-sm-5">Sconto Applicato:</dt>
+                                            <dd class="col-sm-7 text-success">@string.Format("€{0:N2}", richiesta.ImportoSconto)</dd>
+
+                                            <dt class="col-sm-5">Importo Incassato:</dt>
+                                            <dd class="col-sm-7"><strong class="fs-5">@string.Format("€{0:N2}", richiesta.ImportoPagato)</strong></dd>
+
+                                            <dt class="col-sm-5">Rimborso da azienda:</dt>
+                                            <dd class="col-sm-7"><strong class="fs-5 text-primary">@string.Format("€{0:N2}", richiesta.ImportoRemunerazione)</strong></dd>
+                                        </dl>
+
+                                        <form asp-action="Certifica" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="utilizzoId" value="@richiesta.Id" />
+                                            
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="bi bi-check-circle-fill"></i> Conferma Certificazione
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Rifiuta -->
+                        <div class="modal fade" id="rifiutaModal@(richiesta.Id)" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title">
+                                            <i class="bi bi-x-circle-fill"></i> Rifiuta Utilizzo Convenzione
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="alert alert-danger">
+                                            <i class="bi bi-exclamation-octagon"></i> 
+                                            Stai per rifiutare questa richiesta di utilizzo. Specifica il motivo del rifiuto.
+                                        </div>
+
+                                        <dl class="row mb-4">
+                                            <dt class="col-sm-4">Codice Utilizzo:</dt>
+                                            <dd class="col-sm-8"><code class="fs-5">@richiesta.CodiceUtilizzo</code></dd>
+
+                                            <dt class="col-sm-4">Convenzione:</dt>
+                                            <dd class="col-sm-8"><strong>@richiesta.TitoloConvenzione</strong></dd>
+
+                                            <dt class="col-sm-4">Dipendente:</dt>
+                                            <dd class="col-sm-8">@richiesta.NomeDipendente</dd>
+                                        </dl>
+
+                                        <form asp-action="Rifiuta" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="UtilizzoId" value="@richiesta.Id" />
+
+                                            <div class="mb-3">
+                                                <label for="motivoRifiuto@(richiesta.Id)" class="form-label">Motivo Rifiuto</label>
+                                                <textarea class="form-control" id="motivoRifiuto@(richiesta.Id)" name="MotivoRifiuto" rows="4" 
+                                                          placeholder="Es: Importo non corrispondente, servizio non erogato, ecc." required></textarea>
+                                                <span class="text-danger" style="font-size: 0.875rem;"></span>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="bi bi-x-circle-fill"></i> Conferma Rifiuto
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <script>
+        // Validazione motivo rifiuto
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form[action*="Rifiuta"]').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    const textarea = this.querySelector('textarea[name="MotivoRifiuto"]');
+                    const errorSpan = textarea.nextElementSibling;
+                    
+                    if (!textarea.value.trim()) {
+                        e.preventDefault();
+                        errorSpan.textContent = 'Il campo Motivo Rifiuto è obbligatorio.';
+                        textarea.classList.add('is-invalid');
+                    } else {
+                        errorSpan.textContent = '';
+                        textarea.classList.remove('is-invalid');
+                    }
+                });
+            });
+            
+            // Rimuovi errore mentre l'utente digita
+            document.querySelectorAll('textarea[name="MotivoRifiuto"]').forEach(function(textarea) {
+                textarea.addEventListener('input', function() {
+                    const errorSpan = this.nextElementSibling;
+                    if (this.value.trim()) {
+                        errorSpan.textContent = '';
+                        this.classList.remove('is-invalid');
+                    }
+                });
+            });
+        });
+    </script>
+}

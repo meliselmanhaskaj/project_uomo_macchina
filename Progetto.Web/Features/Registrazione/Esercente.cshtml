@@ -1,0 +1,467 @@
+@model Progetto.Web.Controllers.RegistrazioneEsercenteViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione Esercente - Buoni Digitali</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+        }
+        .registration-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+        .registration-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .registration-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+        .registration-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .registration-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 0.9rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .btn-primary-custom:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        .text-danger {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+        }
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .step.active .step-circle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .step.completed .step-circle {
+            background: #28a745;
+            color: white;
+        }
+        .step-label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 600;
+        }
+        .step.active .step-label {
+            color: #667eea;
+        }
+        .btn-navigation {
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-prev {
+            background: #f0f0f0;
+            border: none;
+            color: #333;
+        }
+        .btn-prev:hover {
+            background: #e0e0e0;
+        }
+        .btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+        .btn-next:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-header">
+            <div class="registration-icon">
+                <i class="bi bi-shop-window"></i>
+            </div>
+            <h1 class="registration-title">Registrazione Esercente</h1>
+            <p class="registration-subtitle">Registra la tua attività per gestire le transazioni</p>
+        </div>
+
+        <!-- Stepper -->
+        <div class="stepper">
+            <div class="step active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Dati Attività</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Credenziali</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Convenzione</div>
+            </div>
+        </div>
+
+        <form method="post" asp-action="Esercente" id="registrationForm">
+        @Html.AntiForgeryToken()
+            
+            <!-- Step 1: Dati Attività -->
+            <div class="form-step active" data-step="1">
+                <h5 class="section-title"><i class="bi bi-building"></i> Dati Attività</h5>
+            
+            <div class="mb-3">
+                <label class="form-label" for="NomeEsercizio">Nome Esercizio</label>
+                <input type="text" class="form-control" id="NomeEsercizio" name="NomeEsercizio" value="@Model.NomeEsercizio" required>
+                <span asp-validation-for="NomeEsercizio" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="Categoria">Categoria</label>
+                <select class="form-select" id="Categoria" name="Categoria" required>
+                    <option value="">Seleziona una categoria</option>
+                    <option value="Ristorante">Ristorante</option>
+                    <option value="Bar">Bar</option>
+                    <option value="Negozio">Negozio</option>
+                    <option value="Supermercato">Supermercato</option>
+                    <option value="Palestra">Palestra</option>
+                    <option value="Servizi">Servizi</option>
+                    <option value="Altro">Altro</option>
+                </select>
+                <span asp-validation-for="Categoria" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="Indirizzo">Indirizzo</label>
+                <input type="text" class="form-control" id="Indirizzo" name="Indirizzo" value="@Model.Indirizzo" required>
+                <span asp-validation-for="Indirizzo" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="PartitaIva">Partita IVA</label>
+                <input type="text" class="form-control" id="PartitaIva" name="PartitaIva" value="@Model.PartitaIva" required>
+                <span asp-validation-for="PartitaIva" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="Telefono">Telefono</label>
+                <input type="tel" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" required>
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-navigation btn-next" onclick="nextStep()">
+                        Avanti <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Credenziali -->
+            <div class="form-step" data-step="2">
+                <h5 class="section-title"><i class="bi bi-person-lock"></i> Credenziali di Accesso</h5>
+            
+            <div class="mb-3">
+                <label class="form-label" for="Email">Email</label>
+                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="Password">Password</label>
+                <input type="password" class="form-control" id="Password" name="Password" required>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="ConfermaPassword">Conferma Password</label>
+                <input type="password" class="form-control" id="ConfermaPassword" name="ConfermaPassword" required>
+                <span asp-validation-for="ConfermaPassword" class="text-danger"></span>
+            </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-navigation btn-prev" onclick="prevStep()">
+                        <i class="bi bi-arrow-left me-2"></i> Indietro
+                    </button>
+                    <button type="button" class="btn btn-navigation btn-next" onclick="nextStep()">
+                        Avanti <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Parametri Convenzione -->
+            <div class="form-step" data-step="3">
+                <h5 class="section-title"><i class="bi bi-percent"></i> Parametri Convenzione</h5>
+            <p class="text-muted small mb-3">Imposta i parametri della convenzione che sarà automaticamente creata per tutte le aziende</p>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="PercentualeSconto">Sconto Dipendente (%)</label>
+                    <input type="number" step="0.01" class="form-control" id="PercentualeSconto" name="PercentualeSconto" value="@Model.PercentualeSconto" required>
+                    <span asp-validation-for="PercentualeSconto" class="text-danger"></span>
+                    <small class="text-muted">Percentuale di sconto offerta ai dipendenti</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="PercentualeRemunerazione">Remunerazione Esercente (%)</label>
+                    <input type="number" step="0.01" class="form-control" id="PercentualeRemunerazione" name="PercentualeRemunerazione" value="@Model.PercentualeRemunerazione" required>
+                    <span asp-validation-for="PercentualeRemunerazione" class="text-danger"></span>
+                    <small class="text-muted">Percentuale riconosciuta dall'azienda</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="ImportoMinimo">Importo Minimo (€)</label>
+                    <input type="number" step="0.01" class="form-control" id="ImportoMinimo" name="ImportoMinimo" value="@Model.ImportoMinimo" required>
+                    <span asp-validation-for="ImportoMinimo" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label" for="ImportoMassimoSconto">Sconto Massimo (€)</label>
+                    <input type="number" step="0.01" class="form-control" id="ImportoMassimoSconto" name="ImportoMassimoSconto" value="@Model.ImportoMassimoSconto" required>
+                    <span asp-validation-for="ImportoMassimoSconto" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="MaxUtilizziPerDipendente">Limite Utilizzi</label>
+                    <input type="number" class="form-control" id="MaxUtilizziPerDipendente" name="MaxUtilizziPerDipendente" value="@Model.MaxUtilizziPerDipendente" required>
+                    <span asp-validation-for="MaxUtilizziPerDipendente" class="text-danger"></span>
+                    <small class="text-muted">N. utilizzi</small>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="PeriodoGiorni">Periodo (giorni)</label>
+                    <input type="number" class="form-control" id="PeriodoGiorni" name="PeriodoGiorni" value="@Model.PeriodoGiorni" required>
+                    <span asp-validation-for="PeriodoGiorni" class="text-danger"></span>
+                    <small class="text-muted">Ogni X giorni</small>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" for="DurataMesi">Durata (mesi)</label>
+                    <input type="number" class="form-control" id="DurataMesi" name="DurataMesi" value="@Model.DurataMesi" required>
+                    <span asp-validation-for="DurataMesi" class="text-danger"></span>
+                    <small class="text-muted">Validità</small>
+                </div>
+            </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-navigation btn-prev" onclick="prevStep()">
+                        <i class="bi bi-arrow-left me-2"></i> Indietro
+                    </button>
+                    <button type="submit" class="btn-primary-custom" style="width: auto;">
+                        <i class="bi bi-check-circle me-2"></i>Registrati
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="back-link">
+            <a href="/">
+                <i class="bi bi-arrow-left me-1"></i>Torna alla home
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentStep = 1;
+
+        function showStep(step) {
+            // Nascondi tutti gli step
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('active', 'completed');
+            });
+
+            // Mostra lo step corrente
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+            document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
+
+            // Marca gli step precedenti come completati
+            for (let i = 1; i < step; i++) {
+                document.querySelector(`.step[data-step="${i}"]`).classList.add('completed');
+            }
+
+            currentStep = step;
+        }
+
+        function nextStep() {
+            // Valida i campi dello step corrente prima di avanzare
+            const currentStepElement = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+            const requiredFields = currentStepElement.querySelectorAll('[required]');
+            let isValid = true;
+
+            // Rimuovi messaggi di errore precedenti
+            currentStepElement.querySelectorAll('.validation-error').forEach(el => el.remove());
+            currentStepElement.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                    
+                    // Aggiungi messaggio di errore
+                    const label = currentStepElement.querySelector(`label[for="${field.id}"]`);
+                    const fieldName = label ? label.textContent.trim() : 'Questo campo';
+                    
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'text-danger validation-error small mt-1';
+                    errorMsg.textContent = `${fieldName} è obbligatorio`;
+                    field.parentElement.appendChild(errorMsg);
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            // Controllo aggiuntivo per conferma password
+            if (currentStep === 2) {
+                const password = document.getElementById('Password');
+                const confermaPassword = document.getElementById('ConfermaPassword');
+                if (password.value && confermaPassword.value && password.value !== confermaPassword.value) {
+                    isValid = false;
+                    confermaPassword.classList.add('is-invalid');
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'text-danger validation-error small mt-1';
+                    errorMsg.textContent = 'Le password non corrispondono';
+                    confermaPassword.parentElement.appendChild(errorMsg);
+                }
+            }
+
+            if (isValid && currentStep < 3) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        // Inizializza
+        showStep(1);
+    </script>
+</body>
+</html>

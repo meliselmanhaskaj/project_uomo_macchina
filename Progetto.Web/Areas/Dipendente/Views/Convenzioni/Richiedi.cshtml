@@ -1,0 +1,118 @@
+@model Progetto.Web.Areas.Dipendente.ViewModels.RichiestaUtilizzoViewModel
+
+@{
+    ViewData["Title"] = "Richiedi Utilizzo Convenzione";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-ticket-perforated"></i> Richiedi Utilizzo Convenzione
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Convenzione:</strong> @Model.TitoloConvenzione<br />
+                        <strong>Esercente:</strong> @Model.NomeEsercente<br />
+                        <strong>Sconto:</strong> @Model.PercentualeSconto%
+                        @if (Model.ImportoMinimo.HasValue)
+                        {
+                            <br /><strong>Importo minimo:</strong> @string.Format("€{0:N2}", Model.ImportoMinimo.Value)
+                        }
+                        @if (Model.ImportoMassimoSconto.HasValue)
+                        {
+                            <br /><strong>Sconto massimo:</strong> @string.Format("€{0:N2}", Model.ImportoMassimoSconto.Value)
+                        }
+                    </div>
+
+                    <form asp-action="Richiedi" method="post" id="richiestaForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="ConvenzioneId" />
+                        <input type="hidden" asp-for="TitoloConvenzione" />
+                        <input type="hidden" asp-for="NomeEsercente" />
+                        <input type="hidden" asp-for="PercentualeSconto" />
+                        <input type="hidden" asp-for="ImportoMinimo" />
+                        <input type="hidden" asp-for="ImportoMassimoSconto" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="ImportoTotale" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">&euro;</span>
+                                <input asp-for="ImportoTotale" class="form-control" id="importoTotale" step="0.01" />
+                            </div>
+                            <span asp-validation-for="ImportoTotale" class="text-danger"></span>
+                        </div>
+
+                        <div id="calcoloRiepilogo" class="alert alert-light d-none">
+                            <h6>Riepilogo:</h6>
+                            <table class="table table-sm mb-0">
+                                <tr>
+                                    <td><strong>Importo Totale:</strong></td>
+                                    <td class="text-end" id="riepilogoTotale">&euro;0.00</td>
+                                </tr>
+                                <tr class="text-success">
+                                    <td><strong>Sconto (@Model.PercentualeSconto%):</strong></td>
+                                    <td class="text-end" id="riepilogoSconto">&euro;0.00</td>
+                                </tr>
+                                <tr class="table-active">
+                                    <td><strong>Da Pagare:</strong></td>
+                                    <td class="text-end"><strong id="riepilogoPagato">&euro;0.00</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Note" class="form-label"></label>
+                            <textarea asp-for="Note" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Note" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Annulla
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Conferma Richiesta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            $('#importoTotale').on('input', function() {
+                var importo = parseFloat($(this).val());
+                
+                if (isNaN(importo) || importo <= 0) {
+                    $('#calcoloRiepilogo').addClass('d-none');
+                    return;
+                }
+
+                $.post('@Url.Action("CalcolaImporti")', {
+                    convenzioneId: '@Model.ConvenzioneId',
+                    importoTotale: importo
+                }, function(response) {
+                    if (response.success) {
+                        $('#riepilogoTotale').text('\u20AC' + importo.toFixed(2));
+                        $('#riepilogoSconto').text('\u20AC' + response.importoSconto.toFixed(2));
+                        $('#riepilogoPagato').text('\u20AC' + response.importoPagato.toFixed(2));
+                        $('#calcoloRiepilogo').removeClass('d-none');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,243 @@
+@model Progetto.Web.Areas.Esercente.ViewModels.StoricoTransazioniViewModel
+
+@{
+    ViewData["Title"] = "Storico Transazioni";
+}
+
+<style>
+    .navbar-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 0;
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="navbar-custom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="text-white mb-0"><i class="bi bi-ticket-perforated"></i> Buoni Digitali</h4>
+            </div>
+            <div class="text-white">
+                <i class="bi bi-shop"></i> <strong>@User.Identity.Name</strong>
+                <form method="post" action="/Welcome/Logout" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-outline-light ms-3">
+                        <i class="bi bi-box-arrow-right"></i> Esci
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="bi bi-clock-history"></i> Storico Transazioni</h2>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Index" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Torna alle Richieste
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Transazioni.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Non ci sono transazioni nello storico.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Codice</th>
+                        <th>Convenzione</th>
+                        <th>Dipendente</th>
+                        <th>Azienda</th>
+                        <th class="text-end">Importo</th>
+                        <th class="text-end">Incassato</th>
+                        <th class="text-end">Remunerazione</th>
+                        <th>Stato</th>
+                        <th>Data</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transazione in Model.Transazioni)
+                    {
+                        <tr style="cursor: pointer;" onclick="document.getElementById('btnDettaglioStorico@(transazione.Id)').click()">
+                            <td><code>@transazione.CodiceUtilizzo</code></td>
+                            <td>@transazione.TitoloConvenzione</td>
+                            <td>@transazione.NomeDipendente</td>
+                            <td>@transazione.Azienda</td>
+                            <td class="text-end">@string.Format("€{0:N2}", transazione.ImportoTotale)</td>
+                            <td class="text-end"><strong>@string.Format("€{0:N2}", transazione.ImportoPagato)</strong></td>
+                            <td class="text-end text-primary">
+                                @if (transazione.Stato == "Certificato")
+                                {
+                                    <strong>@string.Format("€{0:N2}", transazione.ImportoRemunerazione)</strong>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td>
+                                @switch (transazione.Stato)
+                                {
+                                    case "Richiesto":
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-clock"></i> In Attesa
+                                        </span>
+                                        break;
+                                    case "Certificato":
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle"></i> Certificato
+                                        </span>
+                                        break;
+                                    case "Rifiutato":
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-x-circle"></i> Rifiutato
+                                        </span>
+                                        break;
+                                    case "Annullato":
+                                        <span class="badge bg-secondary">
+                                            <i class="bi bi-dash-circle"></i> Annullato
+                                        </span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                @transazione.DataRichiesta.ToString("dd/MM/yyyy HH:mm")
+                                @if (transazione.DataCertificazione.HasValue)
+                                {
+                                    <br />
+                                    <small class="text-muted">Cert: @transazione.DataCertificazione.Value.ToString("dd/MM/yyyy")</small>
+                                }
+                            </td>
+                            <td onclick="event.stopPropagation();">
+                                <button type="button" id="btnDettaglioStorico@(transazione.Id)" class="btn btn-sm btn-outline-info" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#dettaglioModal@(transazione.Id)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Modal Dettaglio -->
+                        <div class="modal fade" id="dettaglioModal@(transazione.Id)" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title">Dettaglio Transazione</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Codice:</dt>
+                                            <dd class="col-sm-8"><code>@transazione.CodiceUtilizzo</code></dd>
+
+                                            <dt class="col-sm-4">Convenzione:</dt>
+                                            <dd class="col-sm-8">@transazione.TitoloConvenzione</dd>
+
+                                            <dt class="col-sm-4">Dipendente:</dt>
+                                            <dd class="col-sm-8">@transazione.NomeDipendente</dd>
+
+                                            <dt class="col-sm-4">Azienda:</dt>
+                                            <dd class="col-sm-8">@transazione.Azienda</dd>
+
+                                            <dt class="col-sm-4">Importo Totale:</dt>
+                                            <dd class="col-sm-8">@string.Format("€{0:N2}", transazione.ImportoTotale)</dd>
+
+                                            <dt class="col-sm-4">Sconto Applicato:</dt>
+                                            <dd class="col-sm-8 text-success">@string.Format("€{0:N2}", transazione.ImportoSconto)</dd>
+
+                                            <dt class="col-sm-4">Importo Incassato:</dt>
+                                            <dd class="col-sm-8"><strong>@string.Format("€{0:N2}", transazione.ImportoPagato)</strong></dd>
+
+                                            @if (transazione.Stato == "Certificato")
+                                            {
+                                                <dt class="col-sm-4">Remunerazione:</dt>
+                                                <dd class="col-sm-8 text-primary"><strong>@string.Format("€{0:N2}", transazione.ImportoRemunerazione)</strong></dd>
+                                            }
+
+                                            <dt class="col-sm-4">Stato:</dt>
+                                            <dd class="col-sm-8">@transazione.Stato</dd>
+
+                                            <dt class="col-sm-4">Data Richiesta:</dt>
+                                            <dd class="col-sm-8">@transazione.DataRichiesta.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                                            @if (transazione.DataCertificazione.HasValue)
+                                            {
+                                                <dt class="col-sm-4">Data Certificazione:</dt>
+                                                <dd class="col-sm-8">@transazione.DataCertificazione.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(transazione.Note))
+                                            {
+                                                <dt class="col-sm-4">Note:</dt>
+                                                <dd class="col-sm-8">@transazione.Note</dd>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(transazione.MotivoRifiuto))
+                                            {
+                                                <dt class="col-sm-4">Motivo Rifiuto:</dt>
+                                                <dd class="col-sm-8 text-danger">@transazione.MotivoRifiuto</dd>
+                                            }
+                                        </dl>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Statistiche -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Statistiche</h5>
+                <div class="row text-center">
+                    <div class="col-md-2">
+                        <h3 class="text-primary">@Model.TotaleTransazioni</h3>
+                        <p class="text-muted">Totale Transazioni</p>
+                    </div>
+                    <div class="col-md-2">
+                        <h3 class="text-success">@Model.TotaleCertificate</h3>
+                        <p class="text-muted">Certificati</p>
+                    </div>
+                    <div class="col-md-2">
+                        <h3 class="text-danger">@Model.TotaleRifiutate</h3>
+                        <p class="text-muted">Rifiutati</p>
+                    </div>
+                    <div class="col-md-2">
+                        <h3 class="text-success">@string.Format("€{0:N2}", Model.TotaleIncassato)</h3>
+                        <p class="text-muted">Tot. Incassato</p>
+                    </div>
+                    <div class="col-md-2">
+                        <h3 class="text-primary">@string.Format("€{0:N2}", Model.TotaleRemunerazione)</h3>
+                        <p class="text-muted">Tot. Rimborsi</p>
+                    </div>
+                    <div class="col-md-2">
+                        <h3 class="text-info">@string.Format("€{0:N2}", Model.TotaleRicavi)</h3>
+                        <p class="text-muted">Tot. Ricavi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}

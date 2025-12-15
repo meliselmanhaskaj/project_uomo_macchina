@@ -1,0 +1,72 @@
+@model Progetto.Web.Areas.Esercente.ViewModels.CertificaUtilizzoViewModel
+
+@{
+    ViewData["Title"] = "Certifica Utilizzo";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-check-circle-fill"></i> Certifica Utilizzo Convenzione
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        Verifica attentamente i dati prima di certificare l'utilizzo. Questa operazione non può essere annullata.
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Codice Utilizzo:</dt>
+                        <dd class="col-sm-8"><code class="fs-5">@Model.CodiceUtilizzo</code></dd>
+
+                        <dt class="col-sm-4">Convenzione:</dt>
+                        <dd class="col-sm-8"><strong>@Model.TitoloConvenzione</strong></dd>
+
+                        <dt class="col-sm-4">Dipendente:</dt>
+                        <dd class="col-sm-8">@Model.NomeDipendente</dd>
+
+                        <dt class="col-sm-4">Importo Totale:</dt>
+                        <dd class="col-sm-8">@string.Format("€{0:N2}", Model.ImportoTotale)</dd>
+
+                        <dt class="col-sm-4">Sconto Applicato:</dt>
+                        <dd class="col-sm-8 text-success">@string.Format("€{0:N2}", Model.ImportoSconto)</dd>
+
+                        <dt class="col-sm-4">Importo Incassato:</dt>
+                        <dd class="col-sm-8"><strong class="fs-5">@string.Format("€{0:N2}", Model.ImportoPagato)</strong></dd>
+
+                        <dt class="col-sm-4">Tua Remunerazione:</dt>
+                        <dd class="col-sm-8"><strong class="fs-5 text-primary">@string.Format("€{0:N2}", Model.ImportoRemunerazione)</strong></dd>
+
+                        @if (!string.IsNullOrEmpty(Model.Note))
+                        {
+                            <dt class="col-sm-4">Note:</dt>
+                            <dd class="col-sm-8">@Model.Note</dd>
+                        }
+                    </dl>
+
+                    <form asp-action="Certifica" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="utilizzoId" value="@Model.UtilizzoId" />
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Indietro
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle-fill"></i> Conferma Certificazione
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}
