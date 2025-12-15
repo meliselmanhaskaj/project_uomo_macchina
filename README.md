@@ -7,3 +7,7 @@ Sistema web completo per la gestione di convenzioni aziendali con esercenti.
 **Interfaccia Dipendente:** Visualizzazione convenzioni disponibili con dettagli completi. Richiesta utilizzo tramite modale con calcolo automatico dello sconto in tempo reale. Storico utilizzi cliccabile con stato certificato/rifiutato e dettagli completi.
 
 **Interfaccia Esercente:** Gestione richieste in attesa tramite modali per certificazione o rifiuto con motivazione. Storico transazioni con statistiche remunerazioni.
+
+Per provarlo senza registrarsi puoi accedere con le credenziali dei due utenti:
+- Dipendente: email: mario.rossi@azienda1.it     Password: Test
+- Esercente: email: ristorante@italiano.it       Password: Test
