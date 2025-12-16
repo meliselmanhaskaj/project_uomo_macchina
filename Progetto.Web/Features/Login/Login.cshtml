@@ -139,13 +139,13 @@
             <input type="hidden" asp-for="TipoAccesso" />
 
             <div class="mb-3">
-                <label asp-for="Email" class="form-label">Email</label>
+                <label asp-for="Email" class="form-label">Email *</label>
                 <input asp-for="Email" class="form-control" type="email" placeholder="Inserisci la tua email" autocomplete="off" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Password" class="form-label">Password</label>
+                <label asp-for="Password" class="form-label">Password *</label>
                 <input asp-for="Password" class="form-control" type="password" placeholder="Inserisci la password" autocomplete="new-password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>

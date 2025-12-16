@@ -230,13 +230,13 @@
                 <h5 class="section-title"><i class="bi bi-building"></i> Dati Attività</h5>
             
             <div class="mb-3">
-                <label class="form-label" for="NomeEsercizio">Nome Esercizio</label>
+                <label class="form-label" for="NomeEsercizio">Nome Esercizio *</label>
                 <input type="text" class="form-control" id="NomeEsercizio" name="NomeEsercizio" value="@Model.NomeEsercizio" required>
                 <span asp-validation-for="NomeEsercizio" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Categoria">Categoria</label>
+                <label class="form-label" for="Categoria">Categoria *</label>
                 <select class="form-select" id="Categoria" name="Categoria" required>
                     <option value="">Seleziona una categoria</option>
                     <option value="Ristorante">Ristorante</option>
@@ -251,19 +251,19 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Indirizzo">Indirizzo</label>
+                <label class="form-label" for="Indirizzo">Indirizzo *</label>
                 <input type="text" class="form-control" id="Indirizzo" name="Indirizzo" value="@Model.Indirizzo" required>
                 <span asp-validation-for="Indirizzo" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="PartitaIva">Partita IVA</label>
+                <label class="form-label" for="PartitaIva">Partita IVA *</label>
                 <input type="text" class="form-control" id="PartitaIva" name="PartitaIva" value="@Model.PartitaIva" required>
                 <span asp-validation-for="PartitaIva" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Telefono">Telefono</label>
+                <label class="form-label" for="Telefono">Telefono *</label>
                 <input type="tel" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" required>
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
@@ -280,19 +280,19 @@
                 <h5 class="section-title"><i class="bi bi-person-lock"></i> Credenziali di Accesso</h5>
             
             <div class="mb-3">
-                <label class="form-label" for="Email">Email</label>
+                <label class="form-label" for="Email">Email *</label>
                 <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Password">Password</label>
+                <label class="form-label" for="Password">Password *</label>
                 <input type="password" class="form-control" id="Password" name="Password" required>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="ConfermaPassword">Conferma Password</label>
+                <label class="form-label" for="ConfermaPassword">Conferma Password *</label>
                 <input type="password" class="form-control" id="ConfermaPassword" name="ConfermaPassword" required>
                 <span asp-validation-for="ConfermaPassword" class="text-danger"></span>
             </div>
@@ -314,14 +314,14 @@
             
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label" for="PercentualeSconto">Sconto Dipendente (%)</label>
+                    <label class="form-label" for="PercentualeSconto">Sconto Dipendente (%) *</label>
                     <input type="number" step="0.01" class="form-control" id="PercentualeSconto" name="PercentualeSconto" value="@Model.PercentualeSconto" required>
                     <span asp-validation-for="PercentualeSconto" class="text-danger"></span>
                     <small class="text-muted">Percentuale di sconto offerta ai dipendenti</small>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label" for="PercentualeRemunerazione">Remunerazione Esercente (%)</label>
+                    <label class="form-label" for="PercentualeRemunerazione">Remunerazione Esercente (%) *</label>
                     <input type="number" step="0.01" class="form-control" id="PercentualeRemunerazione" name="PercentualeRemunerazione" value="@Model.PercentualeRemunerazione" required>
                     <span asp-validation-for="PercentualeRemunerazione" class="text-danger"></span>
                     <small class="text-muted">Percentuale riconosciuta dall'azienda</small>
@@ -330,13 +330,13 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label" for="ImportoMinimo">Importo Minimo (€)</label>
+                    <label class="form-label" for="ImportoMinimo">Importo Minimo (€) *</label>
                     <input type="number" step="0.01" class="form-control" id="ImportoMinimo" name="ImportoMinimo" value="@Model.ImportoMinimo" required>
                     <span asp-validation-for="ImportoMinimo" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label" for="ImportoMassimoSconto">Sconto Massimo (€)</label>
+                    <label class="form-label" for="ImportoMassimoSconto">Sconto Massimo (€) *</label>
                     <input type="number" step="0.01" class="form-control" id="ImportoMassimoSconto" name="ImportoMassimoSconto" value="@Model.ImportoMassimoSconto" required>
                     <span asp-validation-for="ImportoMassimoSconto" class="text-danger"></span>
                 </div>
@@ -344,21 +344,21 @@
 
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label class="form-label" for="MaxUtilizziPerDipendente">Limite Utilizzi</label>
+                    <label class="form-label" for="MaxUtilizziPerDipendente">Limite Utilizzi *</label>
                     <input type="number" class="form-control" id="MaxUtilizziPerDipendente" name="MaxUtilizziPerDipendente" value="@Model.MaxUtilizziPerDipendente" required>
                     <span asp-validation-for="MaxUtilizziPerDipendente" class="text-danger"></span>
                     <small class="text-muted">N. utilizzi</small>
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label" for="PeriodoGiorni">Periodo (giorni)</label>
+                    <label class="form-label" for="PeriodoGiorni">Periodo (giorni) *</label>
                     <input type="number" class="form-control" id="PeriodoGiorni" name="PeriodoGiorni" value="@Model.PeriodoGiorni" required>
                     <span asp-validation-for="PeriodoGiorni" class="text-danger"></span>
                     <small class="text-muted">Ogni X giorni</small>
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <label class="form-label" for="DurataMesi">Durata (mesi)</label>
+                    <label class="form-label" for="DurataMesi">Durata (mesi) *</label>
                     <input type="number" class="form-control" id="DurataMesi" name="DurataMesi" value="@Model.DurataMesi" required>
                     <span asp-validation-for="DurataMesi" class="text-danger"></span>
                     <small class="text-muted">Validità</small>

@@ -117,25 +117,25 @@
         <form method="post" asp-action="Dipendente" novalidate>
         @Html.AntiForgeryToken()
             <div class="mb-3">
-                <label class="form-label" for="Nome">Nome</label>
+                <label class="form-label" for="Nome">Nome *</label>
                 <input type="text" class="form-control" id="Nome" name="Nome" value="@Model.Nome">
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Cognome">Cognome</label>
+                <label class="form-label" for="Cognome">Cognome *</label>
                 <input type="text" class="form-control" id="Cognome" name="Cognome" value="@Model.Cognome">
                 <span asp-validation-for="Cognome" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Email">Email</label>
+                <label class="form-label" for="Email">Email *</label>
                 <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="AziendaId">Azienda</label>
+                <label class="form-label" for="AziendaId">Azienda *</label>
                 <select class="form-select" id="AziendaId" name="AziendaId">
                     <option value="">Seleziona la tua azienda</option>
                     @foreach (var azienda in Model.Aziende)
@@ -147,13 +147,13 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="Password">Password</label>
+                <label class="form-label" for="Password">Password *</label>
                 <input type="password" class="form-control" id="Password" name="Password">
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="ConfermaPassword">Conferma Password</label>
+                <label class="form-label" for="ConfermaPassword">Conferma Password *</label>
                 <input type="password" class="form-control" id="ConfermaPassword" name="ConfermaPassword">
                 <span asp-validation-for="ConfermaPassword" class="text-danger"></span>
             </div>
