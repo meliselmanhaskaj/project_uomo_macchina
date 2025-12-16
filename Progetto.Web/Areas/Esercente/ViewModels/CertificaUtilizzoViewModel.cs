@@ -23,7 +23,6 @@ namespace Progetto.Web.Areas.Esercente.ViewModels
         public string TitoloConvenzione { get; set; }
         public string NomeDipendente { get; set; }
 
-        [Required(ErrorMessage = "Il motivo del rifiuto è obbligatorio")]
         [MaxLength(500, ErrorMessage = "Il motivo non può superare i 500 caratteri")]
         [Display(Name = "Motivo Rifiuto")]
         public string MotivoRifiuto { get; set; }

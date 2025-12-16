@@ -255,15 +255,15 @@
                                             <dd class="col-sm-8">@richiesta.NomeDipendente</dd>
                                         </dl>
 
-                                        <form asp-action="Rifiuta" method="post">
+                                        <form asp-action="Rifiuta" method="post" class="form-rifiuto">
                                             @Html.AntiForgeryToken()
                                             <input type="hidden" name="UtilizzoId" value="@richiesta.Id" />
 
                                             <div class="mb-3">
                                                 <label for="motivoRifiuto@(richiesta.Id)" class="form-label">Motivo Rifiuto</label>
                                                 <textarea class="form-control" id="motivoRifiuto@(richiesta.Id)" name="MotivoRifiuto" rows="4" 
-                                                          placeholder="Es: Importo non corrispondente, servizio non erogato, ecc." required></textarea>
-                                                <span class="text-danger" style="font-size: 0.875rem;"></span>
+                                                          placeholder="Es: Importo non corrispondente, servizio non erogato, ecc."></textarea>
+                                                <span class="text-danger small motivo-error"></span>
                                             </div>
 
                                             <div class="modal-footer">
@@ -287,28 +287,37 @@
 @section Scripts {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <script>
-        // Validazione motivo rifiuto
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('form[action*="Rifiuta"]').forEach(function(form) {
-                form.addEventListener('submit', function(e) {
+            // Aggiungi validazione a tutti i form di rifiuto
+            document.querySelectorAll('form.form-rifiuto').forEach(function(form) {
+                form.addEventListener('submit', function(event) {
                     const textarea = this.querySelector('textarea[name="MotivoRifiuto"]');
-                    const errorSpan = textarea.nextElementSibling;
+                    const errorSpan = this.querySelector('.motivo-error');
                     
-                    if (!textarea.value.trim()) {
-                        e.preventDefault();
-                        errorSpan.textContent = 'Il campo Motivo Rifiuto è obbligatorio.';
+                    // Rimuovi spazi bianchi e controlla se è vuoto
+                    if (!textarea.value || !textarea.value.trim()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        
+                        errorSpan.textContent = 'Il motivo del rifiuto è obbligatorio';
                         textarea.classList.add('is-invalid');
-                    } else {
-                        errorSpan.textContent = '';
-                        textarea.classList.remove('is-invalid');
+                        textarea.focus();
+                        return false;
                     }
+                    
+                    // Se è valido, permetti il submit
+                    errorSpan.textContent = '';
+                    textarea.classList.remove('is-invalid');
+                    return true;
                 });
             });
             
             // Rimuovi errore mentre l'utente digita
             document.querySelectorAll('textarea[name="MotivoRifiuto"]').forEach(function(textarea) {
                 textarea.addEventListener('input', function() {
-                    const errorSpan = this.nextElementSibling;
+                    const form = this.closest('form');
+                    const errorSpan = form.querySelector('.motivo-error');
                     if (this.value.trim()) {
                         errorSpan.textContent = '';
                         this.classList.remove('is-invalid');

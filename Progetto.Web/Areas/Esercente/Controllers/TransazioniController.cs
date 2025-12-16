@@ -15,6 +15,7 @@ namespace Progetto.Web.Areas.Esercente.Controllers
 {
     [Area("Esercente")]
     [Authorize]
+    [Alerts]
     public partial class TransazioniController : Controller
     {
         private readonly TemplateDbContext _context;
@@ -116,32 +117,38 @@ namespace Progetto.Web.Areas.Esercente.Controllers
                 var esercente = await GetCurrentEsercente();
                 if (esercente == null)
                 {
-                    TempData.Error("Esercente non trovato");
+                    Alerts.AddError(this, "Esercente non trovato", 5000);
                     return RedirectToAction(nameof(Index));
                 }
 
+                // Recupera informazioni per il messaggio
+                var utilizzo = await _context.UtilizziConvenzioni
+                    .Include(u => u.Convenzione)
+                    .FirstOrDefaultAsync(u => u.Id == utilizzoId);
+                
                 var success = await _buoniService.CertificaUtilizzo(utilizzoId, esercente.Id);
 
                 if (success)
                 {
-                    TempData.Success("Utilizzo certificato con successo!");
+                    var nomeConvenzione = utilizzo?.Convenzione?.Titolo ?? "convenzione";
+                    Alerts.AddSuccess(this, $"Hai confermato la certificazione della convenzione '{nomeConvenzione}'", 8000);
                 }
                 else
                 {
-                    TempData.Error("Utilizzo non trovato");
+                    Alerts.AddError(this, "Utilizzo non trovato", 5000);
                 }
             }
             catch (UnauthorizedAccessException ex)
             {
-                TempData.Error(ex.Message);
+                Alerts.AddError(this, ex.Message, 6000);
             }
             catch (InvalidOperationException ex)
             {
-                TempData.Error(ex.Message);
+                Alerts.AddError(this, ex.Message, 6000);
             }
             catch (Exception ex)
             {
-                TempData.Error($"Errore durante la certificazione: {ex.Message}");
+                Alerts.AddError(this, $"Errore durante la certificazione: {ex.Message}", 6000);
             }
 
             return RedirectToAction(nameof(Index));
@@ -187,32 +194,38 @@ namespace Progetto.Web.Areas.Esercente.Controllers
                 var esercente = await GetCurrentEsercente();
                 if (esercente == null)
                 {
-                    TempData.Error("Esercente non trovato");
+                    Alerts.AddError(this, "Esercente non trovato", 5000);
                     return RedirectToAction(nameof(Index));
                 }
 
+                // Recupera informazioni per il messaggio
+                var utilizzo = await _context.UtilizziConvenzioni
+                    .Include(u => u.Convenzione)
+                    .FirstOrDefaultAsync(u => u.Id == model.UtilizzoId);
+                
                 var success = await _buoniService.RifiutaUtilizzo(model.UtilizzoId, esercente.Id, model.MotivoRifiuto);
 
                 if (success)
                 {
-                    TempData.Success("Utilizzo rifiutato");
+                    var nomeConvenzione = utilizzo?.Convenzione?.Titolo ?? "convenzione";
+                    Alerts.AddError(this, $"Hai rifiutato l'utilizzo della convenzione '{nomeConvenzione}'", 8000);
                 }
                 else
                 {
-                    TempData.Error("Utilizzo non trovato");
+                    Alerts.AddError(this, "Utilizzo non trovato", 5000);
                 }
             }
             catch (UnauthorizedAccessException ex)
             {
-                TempData.Error(ex.Message);
+                Alerts.AddError(this, ex.Message, 6000);
             }
             catch (InvalidOperationException ex)
             {
-                TempData.Error(ex.Message);
+                Alerts.AddError(this, ex.Message, 6000);
             }
             catch (Exception ex)
             {
-                TempData.Error($"Errore durante il rifiuto: {ex.Message}");
+                Alerts.AddError(this, $"Errore durante il rifiuto: {ex.Message}", 6000);
             }
 
             return RedirectToAction(nameof(Index));

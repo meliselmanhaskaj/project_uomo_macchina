@@ -135,7 +135,7 @@ namespace Progetto.Web.Infrastructure
 
         void OnActionExecutedAlert(ActionExecutedContext context)
         {
-            var isHistoryBack = context.Result != null && context.Result.GetType().Name == "HistoryContentResult"; // fatto in questo modo per non prendere una dipendenza con codice della funzionalità History
+            var isHistoryBack = context.Result != null && context.Result.GetType().Name == "HistoryContentResult"; // fatto in questo modo per non prendere una dipendenza con codice della funzionalitï¿½ History
             // SE SONO IN UN REDIRECT PRESERVO I ViewData
             if (context.Result is RedirectResult
                 || context.Result is RedirectToRouteResult
@@ -174,7 +174,25 @@ namespace Progetto.Web.Infrastructure
 
                 foreach (var a in alerts)
                 {
-                    var t = $@"Toastify({{close: true,gravity:'bottom',position:'left', className:'onit-toastify onit-toastify-{a.Level}',text:'{a.Value}',duration:{a.MillisecondsAutoDismiss}}}).showToast();";
+                    // Determina la durata: se Ã¨ 0, disabilita auto-dismiss (-1), altrimenti usa il valore specificato o default 5000ms
+                    var duration = a.MillisecondsAutoDismiss > 0 ? a.MillisecondsAutoDismiss : (a.AutoDismiss ? 5000 : -1);
+                    
+                    // Escape dei caratteri speciali per JavaScript
+                    var escapedText = a.Value.Replace("'", "\\'").Replace("\n", "\\n").Replace("\r", "");
+                    
+                    var t = $@"Toastify({{
+    close: true,
+    gravity: 'bottom',
+    position: 'left',
+    className: 'onit-toastify onit-toastify-{a.Level}',
+    text: '{escapedText}',
+    duration: {duration},
+    stopOnFocus: true,
+    offset: {{
+        x: 20,
+        y: 20
+    }}
+}}).showToast();";
                     s.AppendLine(t);
                 }
 

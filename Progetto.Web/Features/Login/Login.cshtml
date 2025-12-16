@@ -99,6 +99,13 @@
         .back-link a:hover {
             text-decoration: underline;
         }
+        .text-danger::before {
+            content: none !important;
+            display: none !important;
+        }
+        span.text-danger, .validation-error {
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
@@ -178,7 +185,7 @@
                 email.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Email è obbligatorio';
+                errorMsg.textContent = 'Il campo Email Ã¨ obbligatorio';
                 email.parentElement.appendChild(errorMsg);
             }
 
@@ -188,7 +195,7 @@
                 password.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Password è obbligatorio';
+                errorMsg.textContent = 'Il campo Password Ã¨ obbligatorio';
                 password.parentElement.appendChild(errorMsg);
             }
 

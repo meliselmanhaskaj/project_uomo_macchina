@@ -14,6 +14,7 @@ namespace Progetto.Web.Areas.Dipendente.Controllers
 {
     [Area("Dipendente")]
     [Authorize]
+    [Alerts]
     public partial class ConvenzioniController : Controller
     {
         private readonly TemplateDbContext _context;
@@ -139,7 +140,11 @@ namespace Progetto.Web.Areas.Dipendente.Controllers
                     model.Note
                 );
 
-                TempData.Success($"Richiesta creata con successo! Codice utilizzo: {utilizzo.CodiceUtilizzo}");
+                // Recupera il nome della convenzione per il messaggio
+                var convenzione = await _context.Convenzioni.FindAsync(model.ConvenzioneId);
+                var nomeConvenzione = convenzione?.Titolo ?? "convenzione";
+                
+                Alerts.AddInfo(this, $"Hai richiesto l'utilizzo della convenzione '{nomeConvenzione}'", 8000);
                 return RedirectToAction(nameof(Storico));
             }
             catch (InvalidOperationException ex)
