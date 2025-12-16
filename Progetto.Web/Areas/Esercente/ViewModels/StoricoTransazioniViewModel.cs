@@ -7,6 +7,7 @@ namespace Progetto.Web.Areas.Esercente.ViewModels
     {
         public List<TransazioneViewModel> Transazioni { get; set; } = new List<TransazioneViewModel>();
         public int TotaleTransazioni { get; set; }
+        public int TransazioniVisualizzate { get; set; }
         public int TotaleCertificate { get; set; }
         public int TotaleRifiutate { get; set; }
         public decimal TotaleIncassato { get; set; }

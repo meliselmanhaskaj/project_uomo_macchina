@@ -167,7 +167,7 @@ namespace Progetto.Web.Areas.Dipendente.Controllers
         }
 
         // GET: Dipendente/Convenzioni/Storico
-        public virtual async Task<IActionResult> Storico()
+        public virtual async Task<IActionResult> Storico(int count = 10)
         {
             var dipendente = await GetCurrentDipendente();
             if (dipendente == null)
@@ -175,7 +175,7 @@ namespace Progetto.Web.Areas.Dipendente.Controllers
                 return Content("Errore: l'utente autenticato non è registrato come dipendente.");
             }
 
-            var utilizzi = await _buoniService.GetStoricoUtilizziDipendente(dipendente.Id)
+            var tuttiUtilizzi = await _buoniService.GetStoricoUtilizziDipendente(dipendente.Id)
                 .Select(u => new UtilizzoViewModel
                 {
                     Id = u.Id,
@@ -193,11 +193,15 @@ namespace Progetto.Web.Areas.Dipendente.Controllers
                 })
                 .ToListAsync();
 
+            var utilizzi = tuttiUtilizzi.Take(count).ToList();
+
             var viewModel = new StoricoUtilizziViewModel
             {
                 NomeDipendente = $"{dipendente.User.FirstName} {dipendente.User.LastName}",
                 NomeAzienda = dipendente.Azienda.Nome,
-                Utilizzi = utilizzi
+                Utilizzi = utilizzi,
+                TotaleUtilizzi = tuttiUtilizzi.Count,
+                UtilizziVisualizzati = utilizzi.Count
             };
 
             return View(viewModel);

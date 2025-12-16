@@ -203,6 +203,18 @@
             </table>
         </div>
 
+        @if (Model.TransazioniVisualizzate < Model.TotaleTransazioni)
+        {
+            <div class="d-flex justify-content-end align-items-center mt-3 mb-3">
+                <div class="text-end">
+                    <p class="text-muted mb-2">Visualizzate <strong>@Model.TransazioniVisualizzate</strong> di <strong>@Model.TotaleTransazioni</strong> transazioni</p>
+                    <a href="@Url.Action("Storico", new { count = Model.TransazioniVisualizzate + 10 })" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-down-circle"></i> Carica altri...
+                    </a>
+                </div>
+            </div>
+        }
+
         <!-- Statistiche -->
         <div class="card mt-4">
             <div class="card-body">

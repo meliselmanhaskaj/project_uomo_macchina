@@ -232,7 +232,7 @@ namespace Progetto.Web.Areas.Esercente.Controllers
         }
 
         // GET: Esercente/Transazioni/Storico
-        public virtual async Task<IActionResult> Storico()
+        public virtual async Task<IActionResult> Storico(int count = 10)
         {
             var esercente = await GetCurrentEsercente();
             if (esercente == null)
@@ -240,7 +240,7 @@ namespace Progetto.Web.Areas.Esercente.Controllers
                 return Content("Errore: l'utente autenticato non è registrato come esercente.");
             }
 
-            var transazioni = await _buoniService.GetStoricoTransazioniEsercente(esercente.Id)
+            var tutteTransazioni = await _buoniService.GetStoricoTransazioniEsercente(esercente.Id)
                 .Select(u => new TransazioneViewModel
                 {
                     Id = u.Id,
@@ -260,19 +260,22 @@ namespace Progetto.Web.Areas.Esercente.Controllers
                 })
                 .ToListAsync();
 
+            var transazioni = tutteTransazioni.Take(count).ToList();
+
             var viewModel = new StoricoTransazioniViewModel
             {
                 Transazioni = transazioni,
-                TotaleTransazioni = transazioni.Count,
-                TotaleCertificate = transazioni.Count(t => t.Stato == StatoUtilizzo.Certificato),
-                TotaleRifiutate = transazioni.Count(t => t.Stato == StatoUtilizzo.Rifiutato),
-                TotaleIncassato = transazioni
+                TotaleTransazioni = tutteTransazioni.Count,
+                TransazioniVisualizzate = transazioni.Count,
+                TotaleCertificate = tutteTransazioni.Count(t => t.Stato == StatoUtilizzo.Certificato),
+                TotaleRifiutate = tutteTransazioni.Count(t => t.Stato == StatoUtilizzo.Rifiutato),
+                TotaleIncassato = tutteTransazioni
                     .Where(t => t.Stato == StatoUtilizzo.Certificato)
                     .Sum(t => t.ImportoPagato),
-                TotaleRemunerazione = transazioni
+                TotaleRemunerazione = tutteTransazioni
                     .Where(t => t.Stato == StatoUtilizzo.Certificato)
                     .Sum(t => t.ImportoRemunerazione),
-                TotaleRicavi = transazioni
+                TotaleRicavi = tutteTransazioni
                     .Where(t => t.Stato == StatoUtilizzo.Certificato)
                     .Sum(t => t.ImportoPagato + t.ImportoRemunerazione)
             };

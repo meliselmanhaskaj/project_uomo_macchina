@@ -8,6 +8,8 @@ namespace Progetto.Web.Areas.Dipendente.ViewModels
         public string NomeDipendente { get; set; }
         public string NomeAzienda { get; set; }
         public List<UtilizzoViewModel> Utilizzi { get; set; } = new List<UtilizzoViewModel>();
+        public int TotaleUtilizzi { get; set; }
+        public int UtilizziVisualizzati { get; set; }
     }
 
     public class UtilizzoViewModel

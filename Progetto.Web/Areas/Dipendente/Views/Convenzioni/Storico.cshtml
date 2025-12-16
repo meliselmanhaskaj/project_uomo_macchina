@@ -178,6 +178,18 @@
             </table>
         </div>
 
+        @if (Model.UtilizziVisualizzati < Model.TotaleUtilizzi)
+        {
+            <div class="d-flex justify-content-end align-items-center mt-3 mb-3">
+                <div class="text-end">
+                    <p class="text-muted mb-2">Visualizzati <strong>@Model.UtilizziVisualizzati</strong> di <strong>@Model.TotaleUtilizzi</strong> utilizzi</p>
+                    <a href="@Url.Action("Storico", new { count = Model.UtilizziVisualizzati + 10 })" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-down-circle"></i> Carica altri...
+                    </a>
+                </div>
+            </div>
+        }
+
     <div class="card mt-4">
         <div class="card-body">
             <h5 class="card-title">Riepilogo</h5>
