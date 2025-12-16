@@ -500,7 +500,7 @@ Link: https://www.figma.com/design/JdakIjErzjqOy39k8Ofz9v/project_uomo_macchina_
 SCELTE DI DESIGN:
 - Palette principale: Blu professionale come colore dominante (#007bff per azioni primarie)
 - Colori stato:
-  * Grigio (#6c757d): In Attesa
+  * Giallo (#6c757d): In Attesa
   * Verde (#28a745): Certificata
   * Rosso (#dc3545): Rifiutata
 - Colori supporto: Bianco per sfondi, Grigio chiaro (#f8f9fa) per sezioni secondarie
