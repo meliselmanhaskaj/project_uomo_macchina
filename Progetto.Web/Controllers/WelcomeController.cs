@@ -30,5 +30,13 @@ namespace Progetto.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index");
         }
+
+        // Pagina 404 personalizzata
+        [Route("NotFound")]
+        public virtual IActionResult NotFound()
+        {
+            Response.StatusCode = 404;
+            return View("~/Features/Home/NotFound.cshtml");
+        }
     }
 }

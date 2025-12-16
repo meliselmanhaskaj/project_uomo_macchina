@@ -118,19 +118,19 @@
         @Html.AntiForgeryToken()
             <div class="mb-3">
                 <label class="form-label" for="Nome">Nome *</label>
-                <input type="text" class="form-control" id="Nome" name="Nome" value="@Model.Nome">
+                <input type="text" class="form-control" id="Nome" name="Nome" value="@Model.Nome" placeholder="Mario">
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="Cognome">Cognome *</label>
-                <input type="text" class="form-control" id="Cognome" name="Cognome" value="@Model.Cognome">
+                <input type="text" class="form-control" id="Cognome" name="Cognome" value="@Model.Cognome" placeholder="Rossi">
                 <span asp-validation-for="Cognome" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="Email">Email *</label>
-                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
+                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" placeholder="nome.cognome@email.it">
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
@@ -148,13 +148,14 @@
 
             <div class="mb-3">
                 <label class="form-label" for="Password">Password *</label>
-                <input type="password" class="form-control" id="Password" name="Password">
+                <input type="password" class="form-control" id="Password" name="Password" placeholder="••••••••">
+                <small class="text-muted">Minimo 4 caratteri</small>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="ConfermaPassword">Conferma Password *</label>
-                <input type="password" class="form-control" id="ConfermaPassword" name="ConfermaPassword">
+                <input type="password" class="form-control" id="ConfermaPassword" name="ConfermaPassword" placeholder="••••••••">
                 <span asp-validation-for="ConfermaPassword" class="text-danger"></span>
             </div>
 
@@ -191,7 +192,7 @@
                 nome.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Nome è obbligatorio';
+                errorMsg.textContent = 'Inserisci il tuo nome';
                 nome.parentElement.appendChild(errorMsg);
             }
 
@@ -201,7 +202,7 @@
                 cognome.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Cognome è obbligatorio';
+                errorMsg.textContent = 'Inserisci il tuo cognome';
                 cognome.parentElement.appendChild(errorMsg);
             }
 
@@ -211,7 +212,7 @@
                 email.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Email è obbligatorio';
+                errorMsg.textContent = 'Inserisci la tua email aziendale';
                 email.parentElement.appendChild(errorMsg);
             }
 
@@ -221,7 +222,7 @@
                 aziendaId.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Azienda è obbligatorio';
+                errorMsg.textContent = 'Seleziona la tua azienda dal menu';
                 aziendaId.parentElement.appendChild(errorMsg);
             }
 
@@ -231,7 +232,7 @@
                 password.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Password è obbligatorio';
+                errorMsg.textContent = 'Crea una password per il tuo account';
                 password.parentElement.appendChild(errorMsg);
             }
 
@@ -241,14 +242,14 @@
                 confermaPassword.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Il campo Conferma Password è obbligatorio';
+                errorMsg.textContent = 'Conferma la password inserita sopra';
                 confermaPassword.parentElement.appendChild(errorMsg);
             } else if (password.value && confermaPassword.value && password.value !== confermaPassword.value) {
                 isValid = false;
                 confermaPassword.classList.add('is-invalid');
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'text-danger validation-error small mt-1';
-                errorMsg.textContent = 'Le password non corrispondono';
+                errorMsg.textContent = 'Le due password non coincidono';
                 confermaPassword.parentElement.appendChild(errorMsg);
             }
 

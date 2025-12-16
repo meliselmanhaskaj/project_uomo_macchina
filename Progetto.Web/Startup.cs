@@ -102,6 +102,9 @@ namespace Progetto.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Gestione errore 404 - deve essere dopo UseRouting e UseAuthorization
+            app.UseStatusCodePagesWithReExecute("/NotFound");
+
             var node_modules = new CompositePhysicalFileProvider(Directory.GetCurrentDirectory(), "node_modules");
             var areas = new CompositePhysicalFileProvider(Directory.GetCurrentDirectory(), "Areas");
             var compositeFp = new CustomCompositeFileProvider(env.WebRootFileProvider, node_modules, areas);
@@ -119,6 +122,9 @@ namespace Progetto.Web
                 
                 endpoints.MapAreaControllerRoute("Example", "Example", "Example/{controller=Users}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller=Welcome}/{action=Index}/{id?}");
+                
+                // Fallback route per 404
+                endpoints.MapFallbackToController("NotFound", "Welcome");
             });
         }
     }

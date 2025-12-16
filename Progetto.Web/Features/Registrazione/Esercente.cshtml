@@ -231,7 +231,7 @@
             
             <div class="mb-3">
                 <label class="form-label" for="NomeEsercizio">Nome Esercizio *</label>
-                <input type="text" class="form-control" id="NomeEsercizio" name="NomeEsercizio" value="@Model.NomeEsercizio" required>
+                <input type="text" class="form-control" id="NomeEsercizio" name="NomeEsercizio" value="@Model.NomeEsercizio" placeholder="es. Ristorante Italiano" required>
                 <span asp-validation-for="NomeEsercizio" class="text-danger"></span>
             </div>
 
@@ -252,19 +252,19 @@
 
             <div class="mb-3">
                 <label class="form-label" for="Indirizzo">Indirizzo *</label>
-                <input type="text" class="form-control" id="Indirizzo" name="Indirizzo" value="@Model.Indirizzo" required>
+                <input type="text" class="form-control" id="Indirizzo" name="Indirizzo" value="@Model.Indirizzo" placeholder="Via Roma 123, Milano" required>
                 <span asp-validation-for="Indirizzo" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="PartitaIva">Partita IVA *</label>
-                <input type="text" class="form-control" id="PartitaIva" name="PartitaIva" value="@Model.PartitaIva" required>
+                <input type="text" class="form-control" id="PartitaIva" name="PartitaIva" value="@Model.PartitaIva" placeholder="12345678901" required>
                 <span asp-validation-for="PartitaIva" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="Telefono">Telefono *</label>
-                <input type="tel" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" required>
+                <input type="tel" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" placeholder="02 1234567" required>
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
 
@@ -281,19 +281,20 @@
             
             <div class="mb-3">
                 <label class="form-label" for="Email">Email *</label>
-                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required>
+                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" placeholder="contatto@esercizio.it" required>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="Password">Password *</label>
-                <input type="password" class="form-control" id="Password" name="Password" required>
+                <input type="password" class="form-control" id="Password" name="Password" placeholder="••••••••" required>
+                <small class="text-muted">Minimo 4 caratteri</small>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label" for="ConfermaPassword">Conferma Password *</label>
-                <input type="password" class="form-control" id="ConfermaPassword" name="ConfermaPassword" required>
+                <input type="password" class="form-control" id="ConfermaPassword" name="ConfermaPassword" placeholder="••••••••" required>
                 <span asp-validation-for="ConfermaPassword" class="text-danger"></span>
             </div>
 
@@ -315,14 +316,14 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label" for="PercentualeSconto">Sconto Dipendente (%) *</label>
-                    <input type="number" step="0.01" class="form-control" id="PercentualeSconto" name="PercentualeSconto" value="@Model.PercentualeSconto" required>
+                    <input type="number" step="0.01" class="form-control" id="PercentualeSconto" name="PercentualeSconto" value="@Model.PercentualeSconto" placeholder="es. 10" required>
                     <span asp-validation-for="PercentualeSconto" class="text-danger"></span>
                     <small class="text-muted">Percentuale di sconto offerta ai dipendenti</small>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label" for="PercentualeRemunerazione">Remunerazione Esercente (%) *</label>
-                    <input type="number" step="0.01" class="form-control" id="PercentualeRemunerazione" name="PercentualeRemunerazione" value="@Model.PercentualeRemunerazione" required>
+                    <input type="number" step="0.01" class="form-control" id="PercentualeRemunerazione" name="PercentualeRemunerazione" value="@Model.PercentualeRemunerazione" placeholder="es. 8" required>
                     <span asp-validation-for="PercentualeRemunerazione" class="text-danger"></span>
                     <small class="text-muted">Percentuale riconosciuta dall'azienda</small>
                 </div>
@@ -331,13 +332,13 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label" for="ImportoMinimo">Importo Minimo (€) *</label>
-                    <input type="number" step="0.01" class="form-control" id="ImportoMinimo" name="ImportoMinimo" value="@Model.ImportoMinimo" required>
+                    <input type="number" step="0.01" class="form-control" id="ImportoMinimo" name="ImportoMinimo" value="@Model.ImportoMinimo" placeholder="es. 20" required>
                     <span asp-validation-for="ImportoMinimo" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label" for="ImportoMassimoSconto">Sconto Massimo (€) *</label>
-                    <input type="number" step="0.01" class="form-control" id="ImportoMassimoSconto" name="ImportoMassimoSconto" value="@Model.ImportoMassimoSconto" required>
+                    <input type="number" step="0.01" class="form-control" id="ImportoMassimoSconto" name="ImportoMassimoSconto" value="@Model.ImportoMassimoSconto" placeholder="es. 50" required>
                     <span asp-validation-for="ImportoMassimoSconto" class="text-danger"></span>
                 </div>
             </div>
@@ -345,21 +346,21 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="MaxUtilizziPerDipendente">Limite Utilizzi *</label>
-                    <input type="number" class="form-control" id="MaxUtilizziPerDipendente" name="MaxUtilizziPerDipendente" value="@Model.MaxUtilizziPerDipendente" required>
+                    <input type="number" class="form-control" id="MaxUtilizziPerDipendente" name="MaxUtilizziPerDipendente" value="@Model.MaxUtilizziPerDipendente" placeholder="es. 5" required>
                     <span asp-validation-for="MaxUtilizziPerDipendente" class="text-danger"></span>
                     <small class="text-muted">N. utilizzi</small>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="PeriodoGiorni">Periodo (giorni) *</label>
-                    <input type="number" class="form-control" id="PeriodoGiorni" name="PeriodoGiorni" value="@Model.PeriodoGiorni" required>
+                    <input type="number" class="form-control" id="PeriodoGiorni" name="PeriodoGiorni" value="@Model.PeriodoGiorni" placeholder="es. 30" required>
                     <span asp-validation-for="PeriodoGiorni" class="text-danger"></span>
                     <small class="text-muted">Ogni X giorni</small>
                 </div>
 
                 <div class="col-md-4 mb-3">
                     <label class="form-label" for="DurataMesi">Durata (mesi) *</label>
-                    <input type="number" class="form-control" id="DurataMesi" name="DurataMesi" value="@Model.DurataMesi" required>
+                    <input type="number" class="form-control" id="DurataMesi" name="DurataMesi" value="@Model.DurataMesi" placeholder="es. 12" required>
                     <span asp-validation-for="DurataMesi" class="text-danger"></span>
                     <small class="text-muted">Validità</small>
                 </div>
@@ -422,13 +423,24 @@
                     isValid = false;
                     field.classList.add('is-invalid');
                     
-                    // Aggiungi messaggio di errore
+                    // Aggiungi messaggio di errore personalizzato
                     const label = currentStepElement.querySelector(`label[for="${field.id}"]`);
-                    const fieldName = label ? label.textContent.trim() : 'Questo campo';
+                    const fieldName = label ? label.textContent.replace('*', '').trim() : 'questo campo';
                     
                     const errorMsg = document.createElement('div');
                     errorMsg.className = 'text-danger validation-error small mt-1';
-                    errorMsg.textContent = `${fieldName} è obbligatorio`;
+                    
+                    // Messaggi personalizzati per campo
+                    if (field.tagName === 'SELECT') {
+                        errorMsg.textContent = `Seleziona ${fieldName.toLowerCase()}`;
+                    } else if (field.type === 'email') {
+                        errorMsg.textContent = 'Inserisci un indirizzo email valido';
+                    } else if (field.type === 'number') {
+                        errorMsg.textContent = `Inserisci un valore per ${fieldName.toLowerCase()}`;
+                    } else {
+                        errorMsg.textContent = `Completa ${fieldName.toLowerCase()}`;
+                    }
+                    
                     field.parentElement.appendChild(errorMsg);
                 } else {
                     field.classList.remove('is-invalid');
@@ -444,7 +456,7 @@
                     confermaPassword.classList.add('is-invalid');
                     const errorMsg = document.createElement('div');
                     errorMsg.className = 'text-danger validation-error small mt-1';
-                    errorMsg.textContent = 'Le password non corrispondono';
+                    errorMsg.textContent = 'Le due password non coincidono';
                     confermaPassword.parentElement.appendChild(errorMsg);
                 }
             }
