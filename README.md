@@ -8,4 +8,4 @@ Sistema web completo per la gestione di convenzioni aziendali con esercenti.
 
 Per provarlo senza registrarsi puoi accedere con le credenziali dei due utenti:
 - Dipendente: email: mario.rossi@azienda1.it     Password: Test
-- Esercente: email: ristorante@italiano.it       Password: Test
+- Esercente: email: pizzeriadelcorso@gmail.com       Password: Test
