@@ -195,19 +195,19 @@
             <h5 class="card-title">Riepilogo</h5>
             <div class="row text-center">
                 <div class="col-md-3">
-                    <h3 class="text-primary">@Model.Utilizzi.Count()</h3>
+                    <h3 class="text-primary">@Model.TotaleUtilizzi</h3>
                     <p class="text-muted">Totale Richieste</p>
                 </div>
                 <div class="col-md-3">
-                    <h3 class="text-success">@Model.Utilizzi.Count(u => u.Stato == "Certificato")</h3>
+                    <h3 class="text-success">@Model.TotaleCertificati</h3>
                     <p class="text-muted">Certificati</p>
                 </div>
                 <div class="col-md-3">
-                    <h3 class="text-danger">@Model.Utilizzi.Count(u => u.Stato == "Rifiutato")</h3>
+                    <h3 class="text-danger">@Model.TotaleRifiutati</h3>
                     <p class="text-muted">Rifiutati</p>
                 </div>
                 <div class="col-md-3">
-                    <h3 class="text-success">@string.Format("€{0:N2}", Model.Utilizzi.Where(u => u.Stato == "Certificato").Sum(u => u.ImportoSconto))</h3>
+                    <h3 class="text-success">@string.Format("€{0:N2}", Model.TotaleRisparmiato)</h3>
                     <p class="text-muted">Totale Risparmiato</p>
                 </div>
             </div>

@@ -10,6 +10,9 @@ namespace Progetto.Web.Areas.Dipendente.ViewModels
         public List<UtilizzoViewModel> Utilizzi { get; set; } = new List<UtilizzoViewModel>();
         public int TotaleUtilizzi { get; set; }
         public int UtilizziVisualizzati { get; set; }
+        public int TotaleCertificati { get; set; }
+        public int TotaleRifiutati { get; set; }
+        public decimal TotaleRisparmiato { get; set; }
     }
 
     public class UtilizzoViewModel

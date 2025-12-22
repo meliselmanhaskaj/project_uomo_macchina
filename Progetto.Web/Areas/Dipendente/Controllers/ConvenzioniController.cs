@@ -201,7 +201,10 @@ namespace Progetto.Web.Areas.Dipendente.Controllers
                 NomeAzienda = dipendente.Azienda.Nome,
                 Utilizzi = utilizzi,
                 TotaleUtilizzi = tuttiUtilizzi.Count,
-                UtilizziVisualizzati = utilizzi.Count
+                UtilizziVisualizzati = utilizzi.Count,
+                TotaleCertificati = tuttiUtilizzi.Count(u => u.Stato == "Certificato"),
+                TotaleRifiutati = tuttiUtilizzi.Count(u => u.Stato == "Rifiutato"),
+                TotaleRisparmiato = tuttiUtilizzi.Where(u => u.Stato == "Certificato").Sum(u => (decimal?)u.ImportoSconto) ?? 0
             };
 
             return View(viewModel);
